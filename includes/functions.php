@@ -9,6 +9,11 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+// Base path the app is served under (matches links in header.php etc.)
+if (!defined('BASE_URL')) {
+    define('BASE_URL', '/fitness-management-system');
+}
+
 /**
  * e() = escape. Output garda ALWAYS use this to stop XSS.
  * User le <script> haaleko cha bhane, safe text ma badalcha.

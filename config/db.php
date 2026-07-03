@@ -17,7 +17,7 @@ class DB
 
             // ---- Local XAMPP / MAMP settings ----
             $host    = '127.0.0.1';   // localhost
-            $port    = '3307';        // XAMPP MySQL runs on 3307 here (3306 is taken by another local MySQL)
+            $port    = '3306';        // local Homebrew MySQL runs on 3306
             $dbname  = 'fitness';     // our database name
             $user    = 'root';        // XAMPP default user
             $pass    = '';            // XAMPP default = empty. MAMP = 'root'

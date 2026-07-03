@@ -5,7 +5,7 @@
 // ============================================================
 require_once __DIR__ . '/includes/auth.php';
 
-// Already logged in bhaye, aafno dashboard ma pathaune
+// Already logged in bhaye, aafno dashboard ma pathaunee
 if (is_logged_in()) {
     redirect(dashboard_for(current_user()['role_id']));
 }
