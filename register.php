@@ -1,0 +1,131 @@
+<?php
+// ============================================================
+// register.php — new member registration (online admission)
+// Naya user register garcha → automatically Member (role 3) huncha.
+// ============================================================
+require_once __DIR__ . '/includes/auth.php';
+
+// Already logged in bhaye register garna dinnu — dashboard ma pathau
+if (is_logged_in()) {
+    redirect(dashboard_for(current_user()['role_id']));
+}
+
+// ---------- Handle form submit ----------
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrf_check();
+
+    $name     = trim($_POST['name'] ?? '');
+    $email    = trim($_POST['email'] ?? '');
+    $phone    = trim($_POST['phone'] ?? '');
+    $password = $_POST['password'] ?? '';
+    $confirm  = $_POST['confirm'] ?? '';
+
+    // Purano values form ma rakhne (password bahek)
+    $_SESSION['old'] = ['name' => $name, 'email' => $email, 'phone' => $phone];
+
+    // ---------- Validation ----------
+    $errors = [];
+
+    if ($name === '')  $errors[] = 'Name is required.';
+    if ($email === '') {
+        $errors[] = 'Email is required.';
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors[] = 'Please enter a valid email address.';
+    }
+    if ($phone !== '' && !preg_match('/^[0-9]{7,15}$/', $phone)) {
+        $errors[] = 'Phone must be 7–15 digits.';
+    }
+    if (strlen($password) < 6) {
+        $errors[] = 'Password must be at least 6 characters.';
+    }
+    if ($password !== $confirm) {
+        $errors[] = 'Passwords do not match.';
+    }
+
+    // Email already exists ki check
+    if (empty($errors)) {
+        $pdo  = DB::conn();
+        $stmt = $pdo->prepare('SELECT id FROM users WHERE email = ?');
+        $stmt->execute([$email]);
+        if ($stmt->fetch()) {
+            $errors[] = 'This email is already registered. Try logging in.';
+        }
+    }
+
+    // ---------- Errors bhaye, back ----------
+    if (!empty($errors)) {
+        flash('error', implode(' ', $errors));
+        redirect(BASE_URL . '/register.php');
+    }
+
+    // ---------- Insert new member ----------
+    $hash = password_hash($password, PASSWORD_DEFAULT);  // bcrypt
+
+    $pdo  = DB::conn();
+    $stmt = $pdo->prepare(
+        'INSERT INTO users (name, email, password_hash, phone, role_id)
+         VALUES (?, ?, ?, ?, 3)'   // 3 = Member
+    );
+    $stmt->execute([$name, $email, $hash, $phone]);
+
+    unset($_SESSION['old']);
+    flash('success', 'Registration successful! Please log in.');
+    redirect(BASE_URL . '/login.php');
+}
+
+$pageTitle = 'Register — Fitness Management System';
+require_once __DIR__ . '/includes/header.php';
+?>
+
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <h1 class="auth-title">Create Account</h1>
+        <p class="auth-sub">Member ko rup ma register garnus.</p>
+
+        <form method="post" action="<?= BASE_URL ?>/register.php">
+            <?= csrf_field() ?>
+
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name"
+                       value="<?= old('name') ?>"
+                       placeholder="Kushal Ghimire" required autofocus>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email"
+                       value="<?= old('email') ?>"
+                       placeholder="you@example.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone <span class="opt">(optional)</span></label>
+                <input type="text" id="phone" name="phone"
+                       value="<?= old('phone') ?>"
+                       placeholder="9800000000">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password"
+                       placeholder="At least 6 characters" required>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm">Confirm Password</label>
+                <input type="password" id="confirm" name="confirm"
+                       placeholder="Re-enter password" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Register</button>
+        </form>
+
+        <p class="auth-foot">
+            Already have an account?
+            <a href="<?= BASE_URL ?>/login.php">Login here</a>
+        </p>
+    </div>
+</div>
+
+<?php require_once __DIR__ . '/includes/footer.php'; ?>
