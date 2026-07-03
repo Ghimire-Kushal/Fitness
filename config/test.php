@@ -13,7 +13,7 @@ try {
     )->fetchColumn();
     echo "Tables found: " . $count . "<br>";
 
-    // Show how many roles (will be 0 since you insert manually)
+    // Show how many roles (will be 0 since you insert manuallyy)
     $roles = $pdo->query("SELECT COUNT(*) FROM roles")->fetchColumn();
     echo "Rows in roles table: " . $roles;
 
