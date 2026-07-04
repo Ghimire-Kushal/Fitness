@@ -57,3 +57,35 @@
 .alert-success { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
 .alert-error   { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
 .opt { color: #94a3b8; font-weight: 400; font-size: 0.8rem; }
+
+/* ---- Page head ---- */
+.page-head { display: flex; align-items: center; gap: 0.75rem;
+             margin: 1.5rem 0 1rem; }
+.page-head h1 { margin: 0; font-size: 1.6rem; color: #0f172a; }
+
+/* ---- Role badge ---- */
+.role-badge { display: inline-block; padding: 0.15rem 0.6rem;
+              background: #dbeafe; color: #1e40af; border-radius: 999px;
+              font-size: 0.75rem; font-weight: 700; }
+
+/* ---- Cards ---- */
+.card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px;
+        padding: 1.5rem; margin-bottom: 1.25rem; }
+.card-title { margin: 0 0 1rem; font-size: 1.1rem; color: #0f172a; }
+.card-info { background: #f8fafc; }
+
+/* ---- Profile layout ---- */
+.profile-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 1.25rem;
+                align-items: start; }
+@media (max-width: 720px) { .profile-grid { grid-template-columns: 1fr; } }
+
+.divider { border: none; border-top: 1px solid #e2e8f0; margin: 1.25rem 0; }
+.section-note { color: #64748b; font-size: 0.85rem; margin: 0 0 1rem; }
+
+.info-list { list-style: none; padding: 0; margin: 0; }
+.info-list li { display: flex; justify-content: space-between;
+                padding: 0.6rem 0; border-bottom: 1px solid #eef2f6;
+                font-size: 0.9rem; }
+.info-list li:last-child { border-bottom: none; }
+.info-list span { color: #64748b; }
+.info-list strong { color: #0f172a; }
