@@ -44,7 +44,6 @@ require_once __DIR__ . '/../includes/header.php';
 
     <!-- ================= EMPTY STATE ================= -->
     <div class="empty-state">
-        <div class="empty-icon">🏋️</div>
         <h2>No workout plans yet</h2>
         <p>Tapai lai ajhai kunai workout plan assign bhako chaina.
            Trainer ya admin le plan banaepachi yaha dekhincha.</p>
@@ -65,7 +64,7 @@ require_once __DIR__ . '/../includes/header.php';
         </div>
         <div class="wp-search-wrap">
             <input type="text" id="wpSearch" class="wp-search"
-                   placeholder="🔍 Search plans by title or trainer...">
+                   placeholder="Search plans by title or trainer...">
         </div>
     </div>
 

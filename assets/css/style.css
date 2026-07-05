@@ -3,15 +3,16 @@
    ============================================================ */
 
 :root {
-    --ink: #1c231f;
-    --paper: #f6f3ec;
-    --panel: #fffdf9;
-    --line: #e2ddd0;
-    --muted: #736b5e;
-    --primary: #1f6f54;
-    --primary-dark: #14503c;
-    --accent: #d4572a;
-    --accent-dark: #b3461f;
+    --ink: #000000;
+    --paper: #ffffff;
+    --panel: #ffffff;
+    --line: #cfcfcf;
+    --muted: #333333;
+    --header-blue: #cfe8fb;
+    --primary: #000000;
+    --primary-dark: #000000;
+    --accent: #000000;
+    --accent-dark: #000000;
     --good-bg: #e7f3e2;
     --good-fg: #2f5c2a;
     --bad-bg: #fbe7e2;
@@ -19,8 +20,8 @@
     --radius-sm: 4px;
     --radius-md: 6px;
     --radius-lg: 10px;
-    --font-head: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
-    --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --font-head: 'Times New Roman', Times, serif;
+    --font-body: 'Times New Roman', Times, serif;
 }
 
 * { box-sizing: border-box; }
@@ -40,23 +41,23 @@ h1, h2, h3 { font-family: var(--font-head); font-weight: 700; letter-spacing: -0
 a { color: var(--primary); }
 
 /* ---- Navbar ---- */
-.navbar { background: var(--ink); border-bottom: 3px solid var(--accent); }
+.navbar { background: var(--header-blue); border-bottom: 3px solid #000; }
 .nav-inner { display: flex; align-items: center; justify-content: space-between;
              flex-wrap: wrap; padding: 0.85rem 0; gap: 0.75rem; }
 .nav-brand { font-family: var(--font-head); font-size: 1.25rem; font-weight: 700;
-             color: #f6f3ec; text-decoration: none; letter-spacing: 0.01em; }
-.nav-brand span { color: var(--accent); }
+             color: #000; text-decoration: none; letter-spacing: 0.01em; }
+.nav-brand span { color: #000; }
 .nav-links { list-style: none; display: flex; align-items: center; flex-wrap: wrap;
              gap: 1.1rem; margin: 0; padding: 0; }
 .nav-links li { display: flex; align-items: center; }
-.nav-links a { color: #d8d3c4; text-decoration: none; font-size: 0.88rem;
+.nav-links a { color: #000; text-decoration: none; font-size: 0.88rem;
                text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
-.nav-links a:hover { color: #fff; }
-.nav-links .nav-cta { background: var(--accent); color: #fff !important; padding: 0.4rem 0.9rem;
+.nav-links a:hover { text-decoration: underline; }
+.nav-links .nav-cta { background: #000; color: #fff !important; padding: 0.4rem 0.9rem;
                        border-radius: var(--radius-sm); letter-spacing: 0.03em; }
-.nav-links .nav-cta:hover { background: var(--accent-dark); }
-.nav-logout { color: #d8d3c4 !important; }
-.nav-user { color: #b9b3a2; font-size: 0.85rem; text-transform: none; letter-spacing: 0; gap: 0.4rem; }
+.nav-links .nav-cta:hover { background: #333; }
+.nav-logout { color: #000 !important; }
+.nav-user { color: #000; font-size: 0.85rem; text-transform: none; letter-spacing: 0; gap: 0.4rem; }
 
 /* ---- Alerts ---- */
 .alert { padding: 0.75rem 1rem; border-radius: var(--radius-sm); margin: 1.25rem 0 0;
@@ -192,14 +193,14 @@ a { color: var(--primary); }
 .quick-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; margin: 1rem 0 1.5rem; }
 
 /* ---- Membership banner ---- */
-.mem-banner { background: var(--ink); color: #f6f3ec; border-radius: var(--radius-lg);
+.mem-banner { background: #fff; color: #000; border: 2px solid #000; border-radius: var(--radius-lg);
               padding: 1.4rem 1.6rem; display: flex; align-items: center;
               justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin: 1.25rem 0; }
-.mem-banner-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: .05em; color: #b9b3a2; }
+.mem-banner-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: .05em; color: #000; }
 .mem-banner-plan { font-family: var(--font-head); font-size: 1.3rem; font-weight: 700; }
-.mem-banner-dates { font-size: 0.85rem; color: #cfc9b9; }
-.mem-days-num { font-family: var(--font-head); font-size: 2rem; font-weight: 700; color: var(--accent); text-align: right; }
-.mem-days-txt { font-size: 0.78rem; color: #cfc9b9; text-align: right; }
+.mem-banner-dates { font-size: 0.85rem; color: #000; }
+.mem-days-num { font-family: var(--font-head); font-size: 2rem; font-weight: 700; color: #000; text-align: right; }
+.mem-days-txt { font-size: 0.78rem; color: #000; text-align: right; }
 
 /* ---- Pricing ---- */
 .price-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
@@ -262,7 +263,7 @@ a { color: var(--primary); }
 .plan-details { font-size: 0.9rem; color: var(--muted); }
 
 /* ---- Footer ---- */
-.site-footer { background: var(--ink); color: #cfc9b9; margin-top: 3rem; }
+.site-footer { background: var(--header-blue); color: #000; margin-top: 3rem; border-top: 3px solid #000; }
 .footer-inner { padding: 2rem 1.25rem; text-align: center; }
-.footer-brand { color: #f6f3ec; margin: 0 0 0.3rem; font-family: var(--font-head); }
-.footer-copy, .footer-team { margin: 0.2rem 0; font-size: 0.82rem; color: #a8a291; }
+.footer-brand { color: #000; margin: 0 0 0.3rem; font-family: var(--font-head); }
+.footer-copy, .footer-team { margin: 0.2rem 0; font-size: 0.82rem; color: #000; }

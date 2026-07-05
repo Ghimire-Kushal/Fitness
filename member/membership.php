@@ -177,7 +177,7 @@ require_once __DIR__ . '/../includes/header.php';
     </div>
 <?php else: ?>
     <div class="alert alert-info">
-        Tapai sanga active membership chaina. Tala bata ek plan choose garnus 👇
+        Tapai sanga active membership chaina. Tala bata ek plan choose garnus.
     </div>
 <?php endif; ?>
 
@@ -214,7 +214,7 @@ require_once __DIR__ . '/../includes/header.php';
                 <input type="hidden" name="plan_id" value="<?= (int) $p['id'] ?>">
                 <button class="btn btn-outline btn-block">Renew Plan</button>
             </form>
-            <div class="price-current-tag">✓ Current Plan</div>
+            <div class="price-current-tag">Current Plan</div>
         <?php else: ?>
             <form method="post" action="<?= BASE_URL ?>/member/membership.php"
                   onsubmit="return confirm('Select <?= e($p['name']) ?>?');">

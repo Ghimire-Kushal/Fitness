@@ -33,6 +33,6 @@ session_destroy();
 // 4) Ek naya clean session — goodbye message login page ma dekhaउन
 session_start();
 session_regenerate_id(true);            // naya id (session fixation rok)
-flash('success', 'You have been logged out. See you soon! 👋');
+flash('success', 'You have been logged out. See you soon!');
 
 redirect(BASE_URL . '/login.php');

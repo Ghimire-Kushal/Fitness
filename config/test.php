@@ -4,7 +4,7 @@ require_once __DIR__ . '/db.php';
 
 try {
     $pdo = DB::conn();
-    echo "✅ Connected to the 'fitness' database successfully!<br>";
+    echo "Connected to the 'fitness' database successfully!<br>";
 
     // Show how many tables exist
     $count = $pdo->query(
@@ -18,5 +18,5 @@ try {
     echo "Rows in roles table: " . $roles;
 
 } catch (Throwable $e) {
-    echo "❌ Connection failed: " . $e->getMessage();
+    echo "Connection failed: " . $e->getMessage();
 }

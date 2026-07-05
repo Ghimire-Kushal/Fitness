@@ -100,7 +100,7 @@ require_once __DIR__ . '/../includes/header.php';
 ?>
 
 <div class="page-head">
-    <h1>Welcome, <?= e($name) ?> 👋</h1>
+    <h1>Welcome, <?= e($name) ?></h1>
 </div>
 
 <!-- ================= STAT CARDS ================= -->

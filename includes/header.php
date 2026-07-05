@@ -8,11 +8,7 @@
 require_once __DIR__ . '/auth.php';   // session + current_user() ready
 
 $user = current_user();               // logged-in user, or null
-$base = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
-if (basename($base) === 'admin' || basename($base) === 'member' || basename($base) === 'trainer') {
-    $base = dirname($base);
-}
-if ($base === '/' || $base === '\\') { $base = ''; }
+$base = BASE_URL;
 
 // Page title — page le $pageTitle set garyo bhane tyo, natra default
 $pageTitle = $pageTitle ?? 'Fitness Management System';
@@ -32,7 +28,7 @@ $pageTitle = $pageTitle ?? 'Fitness Management System';
 
             <!-- Brand / logo -->
             <a href="<?= $base ?>/index.php" class="nav-brand">
-                💪 Fitness<span>MS</span>
+                Fitness<span>MS</span>
             </a>
 
             <ul class="nav-links">

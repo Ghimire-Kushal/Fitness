@@ -11,7 +11,12 @@ if (session_status() === PHP_SESSION_NONE) {
 
 // Base path the app is served under (matches links in header.php etc.)
 if (!defined('BASE_URL')) {
-    define('BASE_URL', '/fitness-management-system');
+    $__base = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
+    if (in_array(basename($__base), ['admin', 'member', 'trainer'], true)) {
+        $__base = dirname($__base);
+    }
+    if ($__base === '/' || $__base === '\\') { $__base = ''; }
+    define('BASE_URL', $__base);
 }
 
 /**
