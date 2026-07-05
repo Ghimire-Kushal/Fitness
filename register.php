@@ -80,7 +80,7 @@ require_once __DIR__ . '/includes/header.php';
 <div class="auth-wrapper">
     <div class="auth-card">
         <h1 class="auth-title">Create Account</h1>
-        <p class="auth-sub">Member ko rup ma register garnus.</p>
+        <p class="auth-sub">Register as a member.</p>
 
         <form method="post" action="<?= BASE_URL ?>/register.php">
             <?= csrf_field() ?>

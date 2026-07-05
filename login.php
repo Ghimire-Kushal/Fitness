@@ -43,7 +43,7 @@ require_once __DIR__ . '/includes/header.php';
 <div class="auth-wrapper">
     <div class="auth-card">
         <h1 class="auth-title">Login</h1>
-        <p class="auth-sub">Aafno account ma login garnus.</p>
+        <p class="auth-sub">Log in to your account.</p>
 
         <form method="post" action="<?= BASE_URL ?>/login.php">
             <?= csrf_field() ?>
