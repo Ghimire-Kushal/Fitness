@@ -177,7 +177,7 @@ require_once __DIR__ . '/../includes/header.php';
     </div>
 <?php else: ?>
     <div class="alert alert-info">
-        Tapai sanga active membership chaina. Tala bata ek plan choose garnus.
+        You don't have an active membership. Choose a plan below.
     </div>
 <?php endif; ?>
 
