@@ -152,7 +152,7 @@ require_once __DIR__ . '/../includes/header.php';
 <div class="card">
     <h2 class="card-title">Past & History</h2>
     <?php if (empty($past)): ?>
-        <p class="muted">Ajhai kunai purano booking chaina.</p>
+        <p class="muted">No past bookings yet.</p>
     <?php else: ?>
         <table class="table">
             <thead>

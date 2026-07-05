@@ -195,7 +195,7 @@ require_once __DIR__ . '/../includes/header.php';
     </div>
 
     <?php if (empty($plans)): ?>
-        <p class="muted">Ajhai kunai workout plan assign bhako chaina.</p>
+        <p class="muted">No workout plan has been assigned yet.</p>
     <?php else: ?>
         <?php foreach ($plans as $p): ?>
             <div class="plan-row">

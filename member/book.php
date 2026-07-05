@@ -148,7 +148,7 @@ require_once __DIR__ . '/../includes/header.php';
 
 <?php if (empty($slots)): ?>
     <div class="card">
-        <p>No time slots available right now. Admin le slot thapepachi yaha dekhincha.</p>
+        <p>No time slots available right now. They'll appear here once an admin adds one.</p>
     </div>
 <?php else: ?>
 

@@ -45,8 +45,8 @@ require_once __DIR__ . '/../includes/header.php';
     <!-- ================= EMPTY STATE ================= -->
     <div class="empty-state">
         <h2>No workout plans yet</h2>
-        <p>Tapai lai ajhai kunai workout plan assign bhako chaina.
-           Trainer ya admin le plan banaepachi yaha dekhincha.</p>
+        <p>You don't have any workout plans yet.
+           They'll show up here once a trainer or admin creates one for you.</p>
         <a href="<?= BASE_URL ?>/member/dashboard.php" class="btn btn-primary">Back to Dashboard</a>
     </div>
 

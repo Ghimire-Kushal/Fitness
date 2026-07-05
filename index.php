@@ -29,19 +29,19 @@ require_once __DIR__ . '/includes/header.php';
 <section class="features">
     <div class="feature-card">
         <h3>Easy Membership</h3>
-        <p>Online register garnus ra monthly ya yearly plan choose garnus.</p>
+        <p>Register online and choose a monthly or yearly plan.</p>
     </div>
     <div class="feature-card">
         <h3>Smart Booking</h3>
-        <p>Gym sessions ra trainer appointments book garnus — double-booking automatic rokincha.</p>
+        <p>Book gym sessions and trainer appointments — double-booking is prevented automatically.</p>
     </div>
     <div class="feature-card">
         <h3>Personal Workouts</h3>
-        <p>Trainer le banaeko personalized workout plan aafno dashboard ma herna sakincha.</p>
+        <p>View the personalized workout plan your trainer built for you, right from your dashboard.</p>
     </div>
     <div class="feature-card">
         <h3>Secure & Role-Based</h3>
-        <p>Admin, Trainer, ra Member — har role le aafno matra access paucha.</p>
+        <p>Admin, Trainer, and Member — each role only gets access to what it needs.</p>
     </div>
 </section>
 
