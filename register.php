@@ -89,33 +89,33 @@ require_once __DIR__ . '/includes/header.php';
                 <label for="name">Full Name</label>
                 <input type="text" id="name" name="name"
                        value="<?= old('name') ?>"
-                       placeholder="Kushal Ghimire" required autofocus>
+ required autofocus>
             </div>
 
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email"
                        value="<?= old('email') ?>"
-                       placeholder="you@example.com" required>
+ required>
             </div>
 
             <div class="form-group">
                 <label for="phone">Phone <span class="opt">(optional)</span></label>
                 <input type="text" id="phone" name="phone"
                        value="<?= old('phone') ?>"
-                       placeholder="9800000000">
+>
             </div>
 
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password"
-                       placeholder="At least 6 characters" required>
+ required>
             </div>
 
             <div class="form-group">
                 <label for="confirm">Confirm Password</label>
                 <input type="password" id="confirm" name="confirm"
-                       placeholder="Re-enter password" required>
+ required>
             </div>
 
             <button type="submit" class="btn btn-primary btn-block">Register</button>

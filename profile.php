@@ -133,12 +133,12 @@ require_once __DIR__ . '/includes/header.php';
             <div class="form-group">
                 <label for="current_password">Current Password</label>
                 <input type="password" id="current_password" name="current_password"
-                       placeholder="Leave blank to keep same">
+>
             </div>
             <div class="form-group">
                 <label for="new_password">New Password</label>
                 <input type="password" id="new_password" name="new_password"
-                       placeholder="At least 6 characters">
+>
             </div>
             <div class="form-group">
                 <label for="confirm_password">Confirm New Password</label>
