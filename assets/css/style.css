@@ -140,6 +140,9 @@ a { color: var(--primary); }
          font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; }
 .badge-open, .badge-done { background: var(--good-bg); color: var(--good-fg); }
 .badge-full { background: var(--bad-bg); color: var(--bad-fg); }
+.badge-pending { background: #fff4c2; color: #7a5a00; }
+.badge-approved, .badge-completed { background: var(--good-bg); color: var(--good-fg); }
+.badge-cancelled { background: var(--bad-bg); color: var(--bad-fg); }
 
 /* ---- Cards ---- */
 .card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-md);

@@ -118,7 +118,7 @@ function require_role(int|array $allowed): void
  */
 function dashboard_for(int $roleId): string
 {
-    $base = '/fitness-management-system';
+    $base = BASE_URL;
     return match ($roleId) {
         1 => "$base/admin/dashboard.php",
         2 => "$base/trainer/dashboard.php",
