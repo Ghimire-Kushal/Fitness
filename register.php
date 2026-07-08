@@ -64,16 +64,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $pdo  = DB::conn();
     $stmt = $pdo->prepare(
         'INSERT INTO users (name, email, password_hash, phone, role_id)
-         VALUES (?, ?, ?, ?, 3)'   // 3 = Member
+         VALUES (?, ?, ?, ?, ?)'   // 3 = Member
     );
-    $stmt->execute([$name, $email, $hash, $phone]);
+    $stmt->execute([$name, $email, $hash, $phone , 3]);
 
     unset($_SESSION['old']);
     flash('success', 'Registration successful! Please log in.');
     redirect(BASE_URL . '/login.php');
 }
 
-$pageTitle = 'Register — Fitness Management System';
+$pageTitle = 'Register — Fitness Management System of Nepal';
 require_once __DIR__ . '/includes/header.php';
 ?>
 
