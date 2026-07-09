@@ -38,7 +38,7 @@ require_once __DIR__ . '/../includes/header.php';
 
 <div class="card">
     <?php if (empty($users)): ?>
-        <p class="muted">No users found.</p>
+        <p class="muted">No users found ...</p>
     <?php else: ?>
         <table class="table">
             <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Role</th><th>Bookings</th><th>Membership</th><th>Joined</th></tr></thead>
