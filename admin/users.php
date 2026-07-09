@@ -43,6 +43,7 @@ require_once __DIR__ . '/../includes/header.php';
         <table class="table">
             <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Role</th><th>Bookings</th><th>Membership</th><th>Joined</th></tr></thead>
             <tbody>
+<!-- create the user foreach -->
             <?php foreach ($users as $u): ?>
                 <tr>
                     <td><?= e($u['name']) ?></td>
