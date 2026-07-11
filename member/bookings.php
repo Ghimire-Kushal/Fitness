@@ -2,24 +2,24 @@
 <?php
 // ============================================================
 // member/bookings.php — "My Bookings"
-// Sabai booking list, status tracking, ani cancel garne suvidha.
-// Upcoming ra Past alag section ma dekhaucha.
+// Lists all bookings, tracks status, and allows cancelling.
+// Shows Upcoming and Past in separate sections.
 // ============================================================
 require_once __DIR__ . '/../includes/auth.php';
-require_role(3);                         // Member matra
+require_role(3);                         // Member only
 
 $pdo = DB::conn();
 $uid = current_user()['id'];
 
 // ------------------------------------------------------------
-// Handle CANCEL — pending/approved upcoming booking matra cancel huncha
+// Handle CANCEL — only a pending/approved upcoming booking can be cancelled
 // ------------------------------------------------------------
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'cancel') {
     csrf_check();
 
     $bookingId = (int) ($_POST['booking_id'] ?? 0);
 
-    // Multi-table UPDATE: aafno booking, cancellable status, ani upcoming matra
+    // Multi-table UPDATE: only own booking, cancellable status, and upcoming only
     $stmt = $pdo->prepare(
         "UPDATE bookings b
          JOIN time_slots ts ON ts.id = b.time_slot_id
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'cance
     );
     $stmt->execute([$bookingId, $uid]);
 
-    // rowCount() > 0 bhaye matra safal — natra invalid/already-done booking thiyo
+    // rowCount() > 0 means success — otherwise it was an invalid/already-done booking
     if ($stmt->rowCount() > 0) {
         flash('success', 'Booking cancelled successfully.');
     } else {
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'cance
 }
 
 // ------------------------------------------------------------
-// Sabai booking ek query ma load (efficient) — pachi PHP ma split
+// Load all bookings in one query (efficient) — split them in PHP afterward
 // ------------------------------------------------------------
 $stmt = $pdo->prepare(
     "SELECT b.id, b.booking_type, b.status, b.created_at,
@@ -56,7 +56,7 @@ $stmt = $pdo->prepare(
 $stmt->execute([$uid]);
 $all = $stmt->fetchAll();
 
-// Upcoming ra Past ma छुट्याउने
+// Split into Upcoming and Past
 $today    = date('Y-m-d');
 $upcoming = [];
 $past     = [];
@@ -67,12 +67,12 @@ foreach ($all as $b) {
         $past[] = $b;
     }
 }
-// Upcoming lai najik-dekhi-tadha (ascending) banaune
+// Order upcoming from nearest to farthest (ascending)
 $upcoming = array_reverse($upcoming);
 
 // ------------------------------------------------------------
-// Helper: status anusar badge color (dashboard.php sanga milcha)
-// function_exists le double-declare error rokcha
+// Helper: badge color based on status (matches dashboard.php)
+// function_exists prevents a double-declare error
 // ------------------------------------------------------------
 if (!function_exists('status_badge')) {
     function status_badge(string $status): string
@@ -86,7 +86,7 @@ if (!function_exists('status_badge')) {
     }
 }
 
-// Chota helper: ek booking row ko HTML (upcoming/past dubai ma reuse)
+// Small helper: HTML for one booking row (reused in both upcoming/past)
 function booking_row(array $b, bool $canCancel): void
 {
     $typeLabel = $b['booking_type'] === 'trainer_appointment'
@@ -133,7 +133,7 @@ require_once __DIR__ . '/../includes/header.php';
 <div class="card">
     <h2 class="card-title">Upcoming</h2>
     <?php if (empty($upcoming)): ?>
-        <p class="muted">Kunai upcoming booking chaina.
+        <p class="muted">No upcoming bookings.
            <a href="<?= BASE_URL ?>/member/book.php">Book one →</a></p>
     <?php else: ?>
         <table class="table">

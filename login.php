@@ -1,23 +1,23 @@
 <?php
 // ============================================================
 // login.php — login form + handler
-// attempt_login() use garcha, ani role anusar redirect garcha.
+// Uses attempt_login(), then redirects based on the user's role.
 // ============================================================
 require_once __DIR__ . '/includes/auth.php';
 
-// Already logged in bhaye, form dekhauna jaruri chaina — dashboard ma pathau
+// Already logged in — no need to show the form, send to dashboard
 if (is_logged_in()) {
     redirect(dashboard_for(current_user()['role_id']));
 }
 
 // ---------- Handle form submit ----------
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    csrf_check();  // fake submit rok
+    csrf_check();  // block forged submits
 
     $email    = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
 
-    // Purano email form ma rakhne (fail bhaye retype nagarnu parne)
+    // Keep the entered email in the form (so it doesn't need retyping on failure)
     $_SESSION['old']['email'] = $email;
 
     if ($email === '' || $password === '') {
@@ -26,11 +26,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (attempt_login($email, $password)) {
-        unset($_SESSION['old']);  // success — purano clear
+        unset($_SESSION['old']);  // success — clear old values
         flash('success', 'Welcome back, ' . current_user()['name'] . '!');
         redirect(dashboard_for(current_user()['role_id']));
     } else {
-        // Note: "email OR password galat" — kun galat vanne dekhaudaina (security)
+        // Note: deliberately vague ("email or password is wrong") — doesn't reveal which one (security)
         flash('error', 'Invalid email or password.');
         redirect(BASE_URL . '/login.php');
     }

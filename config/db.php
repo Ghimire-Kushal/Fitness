@@ -2,7 +2,7 @@
 // ============================================================
 // config/db.php
 // Single database connection (PDO) for the whole app.
-// Har file le aafnai connection kholdaina — yei euta use garcha.
+// Files don't open their own connection — they all use this one.
 // ============================================================
 
 class DB
@@ -12,12 +12,12 @@ class DB
 
     public static function conn(): PDO
     {
-        // Connection already cha bhane, tehi return gar — naya nabanau.
+        // If a connection already exists, return that one — don't create a new one.
         if (self::$instance === null) {
 
             // ---- Local XAMPP / MAMP settings ----
             $host    = '127.0.0.1';   // localhost
-            $port    = '3306';        // local Homebrew MySQL runs on 3306
+            $port    = '3307';        // XAMPP MySQL (also used by phpMyAdmin)
             $dbname  = 'fitness';     // our database name
             $user    = 'root';        // XAMPP default user
             $pass    = '';            // XAMPP default = empty. MAMP = 'root'
@@ -37,7 +37,7 @@ class DB
             try {
                 self::$instance = new PDO($dsn, $user, $pass, $options);
             } catch (PDOException $e) {
-                // Connection fail bhaye — stop everything, show clean message
+                // If the connection fails — stop everything, show a clean message
                 die('Database connection failed: ' . $e->getMessage());
             }
         }

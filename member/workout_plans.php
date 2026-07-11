@@ -1,21 +1,21 @@
 <?php
 // ============================================================
-// member/workout_plans.php — Member ko assigned workout plans (read-only)
+// member/workout_plans.php — Member's assigned workout plans (read-only)
 // Features:
 //   • Summary header (total plans + latest date)
-//   • Live search filter (JS, title/trainer le khojne)
+//   • Live search filter (JS, searches by title/trainer)
 //   • Clean plan cards — details newline-aware (day-by-day)
-//   • Sundar empty state
+//   • Nice empty state
 // ============================================================
 require_once __DIR__ . '/../includes/auth.php';
-require_role(3);                          // Member matra
+require_role(3);                          // Member only
 
 $pdo = DB::conn();
 $uid = current_user()['id'];
 
 // ------------------------------------------------------------
-// Load: aafno sabai workout plans (naya pahile)
-// assigned_by ko naam ra role pani liyeko
+// Load: all of the member's own workout plans (newest first)
+// Also fetches the assigned_by name and role
 // ------------------------------------------------------------
 $stmt = $pdo->prepare(
     "SELECT wp.id, wp.title, wp.details, wp.created_at,
@@ -71,7 +71,7 @@ require_once __DIR__ . '/../includes/header.php';
     <!-- ================= PLAN CARDS ================= -->
     <div id="wpList" class="wp-list">
     <?php foreach ($plans as $i => $p):
-        // search ko lagi data (title + trainer) — lowercase
+        // data for search (title + trainer) — lowercase
         $searchKey = strtolower($p['title'] . ' ' . ($p['assigned_by_name'] ?? ''));
     ?>
         <div class="wp-card" data-search="<?= e($searchKey) ?>">
@@ -95,13 +95,13 @@ require_once __DIR__ . '/../includes/header.php';
     <?php endforeach; ?>
     </div>
 
-    <!-- search le kehi na bhetaye -->
+    <!-- shown when the search finds no matches -->
     <div id="wpNoResult" class="muted" style="display:none; padding:1rem;">
         No plans match your search.
     </div>
 
     <script>
-    // Live search filter — server hit nagari, turantai filter garcha
+    // Live search filter — filters instantly without hitting the server
     (function () {
         const input = document.getElementById('wpSearch');
         const cards = document.querySelectorAll('#wpList .wp-card');

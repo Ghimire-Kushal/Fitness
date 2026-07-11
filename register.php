@@ -1,11 +1,11 @@
 <?php
 // ============================================================
 // register.php — new member registration (online admission)
-// Naya user register garcha → automatically Member (role 3) huncha.
+// Registers a new user → automatically becomes Member (role 3).
 // ============================================================
 require_once __DIR__ . '/includes/auth.php';
 
-// Already logged in bhaye register garna dinnu — dashboard ma pathau
+// Already logged in — don't allow registering again, send to dashboard
 if (is_logged_in()) {
     redirect(dashboard_for(current_user()['role_id']));
 }
@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
     $confirm  = $_POST['confirm'] ?? '';
 
-    // Purano values form ma rakhne (password bahek)
+    // Keep the previous values in the form (except password)
     $_SESSION['old'] = ['name' => $name, 'email' => $email, 'phone' => $phone];
 
     // ---------- Validation ----------
@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = 'Passwords do not match.';
     }
 
-    // Email already exists ki check
+    // Check if the email already exists
     if (empty($errors)) {
         $pdo  = DB::conn();
         $stmt = $pdo->prepare('SELECT id FROM users WHERE email = ?');
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // ---------- Errors bhaye, back ----------
+    // ---------- If there are errors, go back ----------
     if (!empty($errors)) {
         flash('error', implode(' ', $errors));
         redirect(BASE_URL . '/register.php');

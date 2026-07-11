@@ -1,11 +1,11 @@
 <?php
 // ============================================================
 // index.php — main entry point / landing page
-// Logged in → role dashboard. Naya visitor → welcome page.
+// Logged in → role dashboard. New visitor → welcome page.
 // ============================================================
 require_once __DIR__ . '/includes/auth.php';
 
-// Already logged in bhaye, aafno dashboard ma pathaunee
+// Already logged in — send to their own dashboard
 if (is_logged_in()) {
     redirect(dashboard_for(current_user()['role_id']));
 }
@@ -17,8 +17,8 @@ require_once __DIR__ . '/includes/header.php';
 <section class="hero">
     <h1 class="hero-title">Manage Your Gym, <span>Digitally</span>.</h1>
     <p class="hero-sub">
-        Membership, bookings, trainers, ra workout plans —
-        sabai euta simple platform ma. Manual register ko jhanjhat khatam.
+        Membership, bookings, trainers, and workout plans —
+        all in one simple platform. No more manual registration hassle.
     </p>
     <div class="hero-actions">
         <a href="<?= BASE_URL ?>/register.php" class="btn btn-primary">Get Started</a>

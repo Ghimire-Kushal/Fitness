@@ -1,10 +1,10 @@
 <?php
 // ============================================================
 // includes/footer.php
-// Har page ko last ma include garne. header.php sanga jodincha.
+// Include at the bottom of every page. Pairs with header.php.
 // ============================================================
 ?>
-        </div><!-- /.container (header.php ma khuleko) -->
+        </div><!-- /.container (opened in header.php) -->
     </main>
 
     <footer class="site-footer">

@@ -1,11 +1,11 @@
 <?php
 // ============================================================
-// trainer/dashboard.php — Trainer ko home page
-// Dekhaucha: assigned members, upcoming appointments (with
-//            status update), ani quick stats.
+// trainer/dashboard.php — Trainer's home page
+// Shows: assigned members, upcoming appointments (with
+//            status update), and quick stats.
 // ============================================================
 require_once __DIR__ . '/../includes/auth.php';
-require_role(2);                        // Trainer matra access
+require_role(2);                        // Trainer-only access
 
 $pdo  = DB::conn();
 $uid  = current_user()['id'];
@@ -14,7 +14,7 @@ $name = current_user()['name'];
 $allowedStatuses = ['pending', 'approved', 'completed', 'cancelled'];
 
 // ------------------------------------------------------------
-// POST — trainer le aafno appointment ko status change garna sakcha
+// POST — the trainer can change the status of their own appointment
 // ------------------------------------------------------------
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_check();
@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!in_array($status, $allowedStatuses, true)) {
         flash('error', 'Invalid booking status.');
     } else {
-        // Trainer le aafno matra appointment update garna paucha
+        // A trainer can only update their own appointments
         $stmt = $pdo->prepare(
             "UPDATE bookings SET status = ?
              WHERE id = ? AND trainer_id = ? AND booking_type = 'trainer_appointment'"
@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // ------------------------------------------------------------
-// 1) SABAI COUNTS — ek shot ma
+// 1) ALL COUNTS — in one shot
 // ------------------------------------------------------------
 $stmt = $pdo->prepare(
     "SELECT
@@ -68,7 +68,7 @@ $stmt->execute([$uid]);
 $members = $stmt->fetchAll();
 
 // ------------------------------------------------------------
-// 3) UPCOMING APPOINTMENTS — najik ka 10 wota
+// 3) UPCOMING APPOINTMENTS — the nearest 10
 // ------------------------------------------------------------
 $stmt = $pdo->prepare(
     "SELECT b.id, b.status, ts.slot_date, ts.start_time, ts.end_time,

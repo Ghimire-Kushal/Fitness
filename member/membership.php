@@ -2,13 +2,13 @@
 // ============================================================
 // member/membership.php — Membership plan select / activate
 // Features:
-//   • Current active plan banner (days left sahit)
+//   • Current active plan banner (with days left)
 //   • Pricing cards (monthly / yearly, "Popular" ribbon)
-//   • Smart action: naya activate / different plan ma switch / same plan renew
-//   • Transaction le purano cancel + naya insert atomic banaucha
+//   • Smart action: activate new / switch to a different plan / renew same plan
+//   • Transaction makes cancel-old + insert-new atomic
 // ============================================================
 require_once __DIR__ . '/../includes/auth.php';
-require_role(3);                          // Member matra
+require_role(3);                          // Member only
 
 $pdo = DB::conn();
 $uid = current_user()['id'];
@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $planId = (int) ($_POST['plan_id'] ?? 0);
 
-    // 1) selected plan valid cha?
+    // 1) is the selected plan valid?
     $stmt = $pdo->prepare('SELECT * FROM membership_plans WHERE id = ?');
     $stmt->execute([$planId]);
     $plan = $stmt->fetch();
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         redirect(BASE_URL . '/member/membership.php');
     }
 
-    // 2) currently active membership cha ki?
+    // 2) is there a currently active membership?
     $stmt = $pdo->prepare(
         "SELECT * FROM memberships
          WHERE user_id = ? AND status = 'active' AND end_date >= CURDATE()
@@ -43,11 +43,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $days = (int) $plan['duration_days'];
 
     try {
-        // Sabai kaam ek transaction ma — beech ma fail bhaye kehi save hunna
+        // Everything in one transaction — if it fails midway, nothing gets saved
         $pdo->beginTransaction();
 
         if ($active && (int) $active['plan_id'] === $planId) {
-            // ---- RENEW: same plan → current end_date bata thap ----
+            // ---- RENEW: same plan → extend from the current end_date ----
             $newEnd = date('Y-m-d', strtotime($active['end_date'] . " +{$days} days"));
             $stmt = $pdo->prepare(
                 'UPDATE memberships SET end_date = ? WHERE id = ?'
@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             // ---- NEW or SWITCH ----
             if ($active) {
-                // purano active lai cancel (superseded)
+                // cancel the old active one (superseded)
                 $stmt = $pdo->prepare(
                     "UPDATE memberships SET status = 'cancelled' WHERE id = ?"
                 );
@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         flash('success', $msg);
 
     } catch (Throwable $ex) {
-        // kunai error aaye sabai rollback — data consistent rahancha
+        // if any error occurs, roll everything back — keeps data consistent
         $pdo->rollBack();
         flash('error', 'Could not update membership. Please try again.');
     }
@@ -110,7 +110,7 @@ if ($current) {
 }
 
 // ------------------------------------------------------------
-// Load: available plans (monthly pahile, ani price le sort)
+// Load: available plans (monthly first, then sorted by price)
 // ------------------------------------------------------------
 $plans = $pdo->query(
     "SELECT * FROM membership_plans
@@ -118,7 +118,7 @@ $plans = $pdo->query(
 )->fetchAll();
 
 // ------------------------------------------------------------
-// Load: membership history (active bahek — past/cancelled/expired)
+// Load: membership history (excluding active — past/cancelled/expired)
 // ------------------------------------------------------------
 $stmt = $pdo->prepare(
     "SELECT m.start_date, m.end_date, m.status, mp.name AS plan_name
@@ -130,7 +130,7 @@ $stmt = $pdo->prepare(
 $stmt->execute([$uid]);
 $history = $stmt->fetchAll();
 
-// Helper: plan ko feature list (name anusar generic perks)
+// Helper: plan's feature list (generic perks based on name)
 function plan_features(array $plan): array
 {
     $isPremium = stripos($plan['name'], 'premium') !== false;

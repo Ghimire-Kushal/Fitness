@@ -1,10 +1,10 @@
 <?php
 // ============================================================
 // includes/functions.php
-// Chota helper functions — har page le reuse garcha.
+// Small helper functions — reused by every page.
 // ============================================================
 
-// Start the session once, safely (auth ko lagi chahincha)
+// Start the session once, safely (needed for auth)
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -20,8 +20,8 @@ if (!defined('BASE_URL')) {
 }
 
 /**
- * e() = escape. Output garda ALWAYS use this to stop XSS.
- * User le <script> haaleko cha bhane, safe text ma badalcha.
+ * e() = escape. ALWAYS use this when outputting, to stop XSS.
+ * If a user entered <script>, this converts it to safe text.
  */
 function e(?string $value): string
 {
@@ -29,8 +29,8 @@ function e(?string $value): string
 }
 
 /**
- * redirect() — pathabata arko page ma pathaucha, ani script rokcha.
- * exit garnu jaruri cha, natra tala ko code chalcha.
+ * redirect() — sends the browser to another page, then stops the script.
+ * exit is required, otherwise the code below it would still run.
  */
 function redirect(string $path): void
 {
@@ -39,9 +39,9 @@ function redirect(string $path): void
 }
 
 /**
- * flash() — one-time message store/show garcha.
- * - flash('success', 'Saved!')  → set garcha
- * - flash('success')            → return + delete garcha (once matra dekhcha)
+ * flash() — stores/shows a one-time message.
+ * - flash('success', 'Saved!')  → sets it
+ * - flash('success')            → returns it and deletes it (shown only once)
  */
 function flash(string $key, ?string $message = null): ?string
 {
@@ -57,7 +57,7 @@ function flash(string $key, ?string $message = null): ?string
 }
 
 /**
- * old() — form submit fail bhaye, purano value form ma feri dekhaucha.
+ * old() — if the form submit failed, shows the previous value again in the form.
  */
 function old(string $key, string $default = ''): string
 {
@@ -65,11 +65,11 @@ function old(string $key, string $default = ''): string
 }
 
 // ---------------- CSRF protection ----------------
-// Forms lai fake/forged submit bata bachaucha.
+// Protects forms from fake/forged submits.
 
 /**
- * csrf_token() — session ma ek token banaucha ra return garcha.
- * Har form ma hidden field ma yo token halne.
+ * csrf_token() — creates a token in the session and returns it.
+ * Put this token in a hidden field on every form.
  */
 function csrf_token(): string
 {
@@ -80,7 +80,7 @@ function csrf_token(): string
 }
 
 /**
- * csrf_field() — ready-made hidden input HTML dincha.
+ * csrf_field() — returns ready-made hidden input HTML.
  */
 function csrf_field(): string
 {
@@ -88,8 +88,8 @@ function csrf_field(): string
 }
 
 /**
- * csrf_check() — form submit huda token milyo ki milena check garcha.
- * Namilyo bhane request rokcha.
+ * csrf_check() — checks whether the submitted token matches.
+ * Blocks the request if it doesn't match.
  */
 function csrf_check(): void
 {

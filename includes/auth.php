@@ -1,21 +1,21 @@
 <?php
 // ============================================================
 // includes/auth.php
-// Login, logout, session user, ra role-based access (RBAC).
+// Login, logout, session user, and role-based access (RBAC).
 // ============================================================
 
 require_once __DIR__ . '/../config/db.php';
-require_once __DIR__ . '/functions.php';   // session already start hunca
+require_once __DIR__ . '/functions.php';   // session already started
 
 /**
- * attempt_login() — email + password check garcha.
- * Milyo bhane session ma user rakhcha, true return garcha.
+ * attempt_login() — checks email + password.
+ * On success, stores the user in the session and returns true.
  */
 function attempt_login(string $email, string $password): bool
 {
     $pdo = DB::conn();
 
-    // Prepared statement — SQL injection bata safe
+    // Prepared statement — safe from SQL injection
     $stmt = $pdo->prepare(
         'SELECT id, name, email, password_hash, role_id
          FROM users WHERE email = ?'
@@ -23,12 +23,12 @@ function attempt_login(string $email, string $password): bool
     $stmt->execute([$email]);
     $user = $stmt->fetch();
 
-    // User bhetiyena, OR password milena → fail
+    // User not found, OR password doesn't match → fail
     if (!$user || !password_verify($password, $user['password_hash'])) {
         return false;
     }
 
-    // Success — session ma minimum info matra rakhne (password chaina)
+    // Success — store only minimal info in the session (no password)
     $_SESSION['user'] = [
         'id'      => $user['id'],
         'name'    => $user['name'],
@@ -36,14 +36,14 @@ function attempt_login(string $email, string $password): bool
         'role_id' => (int) $user['role_id'],
     ];
 
-    // Security: login pachi session id badalne (session fixation rok)
+    // Security: regenerate session id after login (prevents session fixation)
     session_regenerate_id(true);
 
     return true;
 }
 
 /**
- * logout() — session sabai clear garcha.
+ * logout() — clears the whole session.
  */
 function logout(): void
 {
@@ -52,7 +52,7 @@ function logout(): void
 }
 
 /**
- * current_user() — logged-in user ko array, or null.
+ * current_user() — the logged-in user's array, or null.
  */
 function current_user(): ?array
 {
@@ -68,7 +68,7 @@ function is_logged_in(): bool
 }
 
 /**
- * role_name() — role_id lai text ma badalcha.
+ * role_name() — converts a role_id to text.
  */
 function role_name(?int $roleId = null): string
 {
@@ -84,8 +84,8 @@ function role_name(?int $roleId = null): string
 // ---------------- Access guards ----------------
 
 /**
- * require_login() — login nabhaye login page ma pathaucha.
- * Har protected page ko top ma yo call garne.
+ * require_login() — sends to the login page if not logged in.
+ * Call this at the top of every protected page.
  */
 function require_login(): void
 {
@@ -96,16 +96,16 @@ function require_login(): void
 }
 
 /**
- * require_role() — thik role nabhaye rokcha.
- * Example: require_role(1)  → Admin matra
- *          require_role([1,2]) → Admin ya Trainer
+ * require_role() — blocks access if the user doesn't have the right role.
+ * Example: require_role(1)  → Admin only
+ *          require_role([1,2]) → Admin or Trainer
  */
 function require_role(int|array $allowed): void
 {
-    require_login();  // pahile login check
+    require_login();  // check login first
 
     $roleId  = current_user()['role_id'];
-    $allowed = (array) $allowed;   // int aayo bhane array banaune
+    $allowed = (array) $allowed;   // wrap a single int into an array
 
     if (!in_array($roleId, $allowed, true)) {
         http_response_code(403);
@@ -114,7 +114,7 @@ function require_role(int|array $allowed): void
 }
 
 /**
- * dashboard_for() — role anusar kun dashboard ma janne.
+ * dashboard_for() — which dashboard to go to based on role.
  */
 function dashboard_for(int $roleId): string
 {

@@ -1,9 +1,9 @@
 <?php
 // ============================================================
-// profile.php — view & update own details (sabai role ko lagi)
+// profile.php — view & update own details (for all roles)
 // ============================================================
 require_once __DIR__ . '/includes/auth.php';
-require_login();   // logged-in matra
+require_login();   // logged-in users only
 
 $pdo = DB::conn();
 $uid = current_user()['id'];
@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
     $phone = trim($_POST['phone'] ?? '');
 
-    // Password change (optional — bharyo bhane matra)
+    // Password change (optional — only if filled in)
     $curPass = $_POST['current_password'] ?? '';
     $newPass = $_POST['new_password'] ?? '';
     $conPass = $_POST['confirm_password'] ?? '';
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = 'Phone must be 7–15 digits.';
     }
 
-    // --- email unique check (aafno bahek aru sanga match bhayo ki) ---
+    // --- email unique check (whether it matches another account besides this one) ---
     if (empty($errors)) {
         $stmt = $pdo->prepare('SELECT id FROM users WHERE email = ? AND id <> ?');
         $stmt->execute([$email, $uid]);
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // --- password change requested? ---
     $changePass = ($curPass !== '' || $newPass !== '' || $conPass !== '');
     if ($changePass && empty($errors)) {
-        // current password verify garne
+        // verify current password
         $stmt = $pdo->prepare('SELECT password_hash FROM users WHERE id = ?');
         $stmt->execute([$uid]);
         $row = $stmt->fetch();
@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute([$name, $email, $phone, $uid]);
     }
 
-    // Session ma naya name/email update garne (navbar ma dekhincha)
+    // Update name/email in the session (shown in the navbar)
     $_SESSION['user']['name']  = $name;
     $_SESSION['user']['email'] = $email;
 
@@ -127,7 +127,7 @@ require_once __DIR__ . '/includes/header.php';
 
             <hr class="divider">
             <p class="section-note">
-                Password change garnu cha bhane matra tala bharnus.
+                Only fill this in below if you want to change your password.
             </p>
 
             <div class="form-group">

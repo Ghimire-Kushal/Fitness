@@ -1,28 +1,28 @@
 <?php
 // ============================================================
-// member/dashboard.php — Member ko home page
-// Dekhaucha: membership status, upcoming bookings, workout plans,
-//            assigned trainer, ani quick stats.
-// Efficiency: sabai count ek subquery-based query ma liyeko —
-//             database ma barambar hit hudaina.
+// member/dashboard.php — Member's home page
+// Shows: membership status, upcoming bookings, workout plans,
+//            assigned trainer, and quick stats.
+// Efficiency: all counts are fetched in one subquery-based query —
+//             avoids repeated hits to the database.
 // ============================================================
 require_once __DIR__ . '/../includes/auth.php';
-require_role(3);                        // Member matra access
+require_role(3);                        // Member-only access
 
 $pdo  = DB::conn();
 $uid  = current_user()['id'];
 $name = current_user()['name'];
 
 // ------------------------------------------------------------
-// 1) SABAI COUNTS — ek shot ma (efficient)
-//    Har card ko lagi alag query nakholera subquery use gareko.
+// 1) ALL COUNTS — in one shot (efficient)
+//    Uses subqueries instead of a separate query for each card.
 // ------------------------------------------------------------
 $stmt = $pdo->prepare(
     "SELECT
-        -- total bookings (cancelled bahek)
+        -- total bookings (excluding cancelled)
         (SELECT COUNT(*) FROM bookings
            WHERE user_id = :u1 AND status <> 'cancelled')                       AS total_bookings,
-        -- aaune (upcoming) bookings
+        -- upcoming bookings
         (SELECT COUNT(*) FROM bookings b
            JOIN time_slots ts ON ts.id = b.time_slot_id
            WHERE b.user_id = :u2 AND ts.slot_date >= CURDATE()
@@ -36,7 +36,7 @@ $stmt->execute([':u1' => $uid, ':u2' => $uid, ':u3' => $uid, ':u4' => $uid]);
 $stats = $stmt->fetch();
 
 // ------------------------------------------------------------
-// 2) ACTIVE MEMBERSHIP — cha ki chaina + plan detail
+// 2) ACTIVE MEMBERSHIP — whether it exists + plan detail
 // ------------------------------------------------------------
 $stmt = $pdo->prepare(
     "SELECT m.start_date, m.end_date, m.status,
@@ -51,7 +51,7 @@ $stmt->execute([$uid]);
 $membership = $stmt->fetch();   // active plan, or false
 
 // ------------------------------------------------------------
-// 3) UPCOMING BOOKINGS — najik ka 5 wota
+// 3) UPCOMING BOOKINGS — the nearest 5
 // ------------------------------------------------------------
 $stmt = $pdo->prepare(
     "SELECT b.booking_type, b.status,
@@ -69,7 +69,7 @@ $stmt->execute([$uid]);
 $upcoming = $stmt->fetchAll();
 
 // ------------------------------------------------------------
-// 4) LATEST WORKOUT PLANS — 3 wota
+// 4) LATEST WORKOUT PLANS — 3 of them
 // ------------------------------------------------------------
 $stmt = $pdo->prepare(
     "SELECT wp.title, wp.details, wp.created_at, u.name AS assigned_by_name
@@ -83,7 +83,7 @@ $stmt->execute([$uid]);
 $plans = $stmt->fetchAll();
 
 // ------------------------------------------------------------
-// Chota helper: booking status anusar badge ko color class
+// Small helper: badge color class based on booking status
 // ------------------------------------------------------------
 function status_badge(string $status): string
 {
@@ -158,7 +158,7 @@ require_once __DIR__ . '/../includes/header.php';
     </div>
 
     <?php if (empty($upcoming)): ?>
-        <p class="muted">Kunai upcoming booking chaina.
+        <p class="muted">No upcoming bookings.
            <a href="<?= BASE_URL ?>/member/book.php">Book one →</a></p>
     <?php else: ?>
         <table class="table">

@@ -1,8 +1,8 @@
 <?php
 // ============================================================
 // includes/header.php
-// Har page ko top ma include garne. Role anusar nav dekhaucha.
-// footer.php le yesle kholeko tags banda garcha.
+// Include at the top of every page. Shows nav based on role.
+// footer.php closes the tags opened here.
 // ============================================================
 
 require_once __DIR__ . '/auth.php';   // session + current_user() ready
@@ -10,7 +10,7 @@ require_once __DIR__ . '/auth.php';   // session + current_user() ready
 $user = current_user();               // logged-in user, or null
 $base = BASE_URL;
 
-// Page title — page le $pageTitle set garyo bhane tyo, natra default
+// Page title — use $pageTitle if the page set it, otherwise the default
 $pageTitle = $pageTitle ?? 'Fitness Management System';
 ?>
 <!DOCTYPE html>
@@ -54,7 +54,7 @@ $pageTitle = $pageTitle ?? 'Fitness Management System';
                     <li><a href="<?= $base ?>/member/workout_plans.php">Workouts</a></li>
                 <?php endif; ?>
 
-                <!-- Sabai logged-in user ko lagi common -->
+                <!-- Common to all logged-in users -->
                 <li><a href="<?= $base ?>/profile.php">Profile</a></li>
                 <li class="nav-user">
                     <?= e($user['name']) ?>
@@ -82,4 +82,4 @@ $pageTitle = $pageTitle ?? 'Fitness Management System';
 
     <main>
         <div class="container">
-        <!-- Page content tala continue huncha; footer.php le banda garcha -->
+        <!-- Page content continues below; footer.php closes it -->

@@ -1,11 +1,11 @@
 <?php
 // ============================================================
 // member/book.php — gym session + trainer appointment booking
-// Double-booking rok: DB UNIQUE (user_id, time_slot_id, booking_type)
+// Prevents double-booking via: DB UNIQUE (user_id, time_slot_id, booking_type)
 //                     + capacity check + per-trainer check.
 // ============================================================
 require_once __DIR__ . '/../includes/auth.php';
-require_role(3);                       // Member matra
+require_role(3);                       // Member only
 
 $pdo = DB::conn();
 $uid = current_user()['id'];
@@ -38,13 +38,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = 'That time slot is already in the past.';
     }
 
-    // 3) trainer appointment ko lagi extra checks
+    // 3) extra checks for a trainer appointment
     $trainerToStore = null;
     if ($type === 'trainer_appointment' && empty($errors)) {
         if ($trainerId <= 0) {
             $errors[] = 'Please choose a trainer for the appointment.';
         } else {
-            // trainer tapai lai assign gareko cha ki?
+            // is this trainer actually assigned to you?
             $stmt = $pdo->prepare(
                 'SELECT 1 FROM member_trainers WHERE member_id = ? AND trainer_id = ?'
             );
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!$stmt->fetch()) {
                 $errors[] = 'That trainer is not assigned to you.';
             } else {
-                // trainer tei slot ma already booked cha ki?
+                // is this trainer already booked for that same slot?
                 $stmt = $pdo->prepare(
                     "SELECT COUNT(*) FROM bookings
                      WHERE time_slot_id = ? AND trainer_id = ?
@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // 4) capacity check (dubai type le slot capacity ma count huncha)
+    // 4) capacity check (both booking types count toward slot capacity)
     if (empty($errors)) {
         $stmt = $pdo->prepare(
             "SELECT COUNT(*) FROM bookings
@@ -87,14 +87,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         redirect(BASE_URL . '/member/book.php');
     }
 
-    // 5) insert — UNIQUE constraint le same member ko duplicate rokcha
+    // 5) insert — UNIQUE constraint prevents a duplicate from the same member
     try {
         $stmt = $pdo->prepare(
             'INSERT INTO bookings (user_id, time_slot_id, booking_type, trainer_id, status)
              VALUES (?, ?, ?, ?, "pending")'
         );
         $stmt->execute([$uid, $slotId, $type, $trainerToStore]);
-        flash('success', 'Booking requested! Status: pending. Admin le approve garne cha.');
+        flash('success', 'Booking requested! Status: pending. An admin will approve it.');
     } catch (PDOException $e) {
         if ($e->getCode() === '23000') {
             // duplicate (UNIQUE) violation
@@ -108,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // ---------- Load data for display ----------
 
-// upcoming slots + kati booked bhaisakyo
+// upcoming slots + how many are already booked
 $slots = $pdo->query(
     "SELECT ts.*,
         (SELECT COUNT(*) FROM bookings b
@@ -118,7 +118,7 @@ $slots = $pdo->query(
      ORDER BY ts.slot_date, ts.start_time"
 )->fetchAll();
 
-// tapai lai assign gareko trainers
+// trainers assigned to you
 $stmt = $pdo->prepare(
     "SELECT u.id, u.name, tp.specialization
      FROM member_trainers mt
@@ -141,8 +141,8 @@ require_once __DIR__ . '/../includes/header.php';
 
 <?php if (empty($myTrainers)): ?>
     <div class="alert alert-info">
-        Tapai lai kunai trainer assign bhako chaina — trainer appointment book garna
-        admin le pahile trainer assign garnu parcha. Gym session ta book garna sakincha.
+        You don't have a trainer assigned yet — an admin must assign one before
+        you can book a trainer appointment. You can still book a gym session.
     </div>
 <?php endif; ?>
 
@@ -189,7 +189,7 @@ require_once __DIR__ . '/../includes/header.php';
                 </select>
 
                 <?php if (!empty($myTrainers)): ?>
-                    <label class="mini-label">Trainer (appointment ko lagi matra)</label>
+                    <label class="mini-label">Trainer (only for appointments)</label>
                     <select name="trainer_id" class="slot-select">
                         <option value="0">— Select trainer —</option>
                         <?php foreach ($myTrainers as $t): ?>
