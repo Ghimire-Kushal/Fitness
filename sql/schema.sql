@@ -26,7 +26,7 @@ CREATE TABLE users (
   FOREIGN KEY (role_id) REFERENCES roles(id)
 ) ENGINE=InnoDB;
 
--- 3. membership_plans — monthly / yearly plans
+-- 3. membership_plans — monthly / yearly planss
 CREATE TABLE membership_plans (
   id            INT AUTO_INCREMENT PRIMARY KEY,
   name          VARCHAR(80) NOT NULL,
