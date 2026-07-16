@@ -35,6 +35,12 @@ CREATE TABLE membership_plans (
   price         DECIMAL(10,2) NOT NULL
 ) ENGINE=InnoDB;
 
+INSERT INTO membership_plans (name, duration_type, duration_days, price) VALUES
+('Basic Monthly', 'monthly', 30, 1500.00),
+('Premium Monthly', 'monthly', 30, 2500.00),
+('Basic Yearly', 'yearly', 365, 15000.00),
+('Premium Yearly', 'yearly', 365, 25000.00);
+
 -- 4. memberships — kun member le kun plan liyo
 CREATE TABLE memberships (
   id         INT AUTO_INCREMENT PRIMARY KEY,

@@ -21,10 +21,10 @@ class DB
             $dbname  = 'fitness';     // our database name
             $user    = 'root';        // XAMPP default user
             $pass    = '';            // XAMPP default = empty. MAMP = 'root'
-            $charset = 'utf8mb4';
+            // $charset = 'utf8mb4';
 
-            $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=$charset";
-
+            $dsn = "mysql:host=$host;port=$port;dbname=$dbname;";
+// charset=$charset
             $options = [
                 // Errors throw exceptions instead of failing silently
                 PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,

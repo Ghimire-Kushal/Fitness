@@ -3,6 +3,7 @@ require_once __DIR__ . '/../includes/auth.php';
 require_role(1);
 
 $pdo = DB::conn();
+ensure_default_membership_plans($pdo);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_check();

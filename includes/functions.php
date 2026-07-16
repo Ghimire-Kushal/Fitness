@@ -99,3 +99,30 @@ function csrf_check(): void
         die('Invalid CSRF token. Please go back and try again.');
     }
 }
+
+/**
+ * Ensures the membership page has plans to show after a fresh database setup.
+ */
+function ensure_default_membership_plans(PDO $pdo): void
+{
+    $count = (int) $pdo->query('SELECT COUNT(*) FROM membership_plans')->fetchColumn();
+    if ($count > 0) {
+        return;
+    }
+
+    $stmt = $pdo->prepare(
+        'INSERT INTO membership_plans (name, duration_type, duration_days, price)
+         VALUES (?, ?, ?, ?)'
+    );
+
+    $plans = [
+        ['Basic Monthly', 'monthly', 30, 1500],
+        ['Premium Monthly', 'monthly', 30, 2500],
+        ['Basic Yearly', 'yearly', 365, 15000],
+        ['Premium Yearly', 'yearly', 365, 25000],
+    ];
+
+    foreach ($plans as $plan) {
+        $stmt->execute($plan);
+    }
+}

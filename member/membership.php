@@ -12,6 +12,7 @@ require_role(3);                          // Member only
 
 $pdo = DB::conn();
 $uid = current_user()['id'];
+ensure_default_membership_plans($pdo);
 
 // ------------------------------------------------------------
 // Handle plan selection (activate / switch / renew)
@@ -208,23 +209,20 @@ require_once __DIR__ . '/../includes/header.php';
         <?php endforeach; ?>
         </ul>
 
-        <?php if ($isCurrent): ?>
-            <form method="post" action="<?= BASE_URL ?>/member/membership.php">
-                <?= csrf_field() ?>
-                <input type="hidden" name="plan_id" value="<?= (int) $p['id'] ?>">
-                <button class="btn btn-outline btn-block">Renew Plan</button>
-            </form>
-            <div class="price-current-tag">Current Plan</div>
-        <?php else: ?>
-            <form method="post" action="<?= BASE_URL ?>/member/membership.php"
-                  onsubmit="return confirm('Select <?= e($p['name']) ?>?');">
-                <?= csrf_field() ?>
-                <input type="hidden" name="plan_id" value="<?= (int) $p['id'] ?>">
-                <button class="btn btn-primary btn-block">
-                    <?= $current ? 'Switch to this' : 'Select Plan' ?>
-                </button>
-            </form>
-        <?php endif; ?>
+        <div class="price-actions">
+            <?php if ($isCurrent): ?>
+                <div class="price-current-tag">Current Plan</div>
+            <?php else: ?>
+                <form method="post" action="<?= BASE_URL ?>/member/membership.php"
+                      onsubmit="return confirm('Select <?= e($p['name']) ?>?');">
+                    <?= csrf_field() ?>
+                    <input type="hidden" name="plan_id" value="<?= (int) $p['id'] ?>">
+                    <button class="btn btn-primary btn-block">
+                        <?= $current ? 'Switch to this' : 'Select Plan' ?>
+                    </button>
+                </form>
+            <?php endif; ?>
+        </div>
     </div>
 <?php endforeach; ?>
 </div>

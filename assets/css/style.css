@@ -219,55 +219,62 @@ a { color: var(--primary); }
 .mem-days-txt { font-size: 0.78rem; color: #000; text-align: right; }
 
 /* ---- Pricing ---- */
-.price-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-              gap: 1.25rem; margin: 1.5rem 0; }
+.price-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+              gap: 1.25rem; align-items: stretch; margin: 1.5rem 0; }
 .price-card { position: relative; background: var(--panel); border: 1px solid var(--line);
-              border-radius: var(--radius-lg); padding: 1.75rem 1.5rem; text-align: center; }
+              border-radius: var(--radius-lg); padding: 1.75rem 1.5rem; text-align: center;
+              min-height: 360px; display: flex; flex-direction: column; }
 .price-card.price-popular { border-color: var(--accent); box-shadow: 0 8px 24px rgba(212,87,42,.12); }
 .price-name { font-family: var(--font-head); font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem; }
-.price-amount { margin: 0.5rem 0; }
+.price-amount { min-height: 3.1rem; margin: 0.5rem 0; display: flex; align-items: baseline;
+                justify-content: center; gap: 0.2rem; flex-wrap: wrap; }
 .price-cur { font-size: 1.1rem; vertical-align: top; color: var(--muted); }
 .price-num { font-family: var(--font-head); font-size: 2.1rem; font-weight: 700; color: var(--ink); }
 .price-per { color: var(--muted); font-size: 0.85rem; }
 .price-type { color: var(--muted); font-size: 0.8rem; margin-bottom: 1rem; }
 .price-current-tag { display: inline-block; background: var(--good-bg); color: var(--good-fg);
                       font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
-                      padding: 0.15rem 0.6rem; border-radius: 999px; margin-bottom: 0.75rem; }
+                      padding: 0.15rem 0.6rem; border-radius: 999px; }
 .price-features { list-style: none; padding: 0; margin: 1rem 0; text-align: left;
-                   font-size: 0.88rem; color: var(--muted); }
+                   font-size: 0.88rem; color: var(--muted); flex: 1; }
 .price-features li { padding: 0.3rem 0; }
+.price-actions { min-height: 2.7rem; display: flex; align-items: center; justify-content: center; margin-top: 0.75rem; }
+.price-actions form { width: 100%; }
 .ribbon { position: absolute; top: -0.7rem; right: 1rem; background: var(--accent); color: #fff;
           font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .03em;
           padding: 0.25rem 0.7rem; border-radius: var(--radius-sm); }
 .price-card.price-current { border-color: var(--primary); }
 
 /* ---- Booking slots ---- */
-.slot-form { margin-bottom: 1.5rem; }
+.slot-form { display: grid; gap: 0.55rem; margin: 1rem 0 0; }
 .slot-select { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: flex-end; }
-.slot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-             gap: 1rem; margin: 1rem 0; }
+.slot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 340px));
+             gap: 1rem; align-items: stretch; margin: 1rem 0; }
 .slot-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-md);
-             padding: 1.1rem 1.25rem; }
+             padding: 1.25rem; display: flex; flex-direction: column; }
 .slot-card.slot-full { opacity: 0.6; }
 .slot-date { font-weight: 700; color: var(--ink); font-size: 0.95rem; }
 .slot-time { color: var(--muted); font-size: 0.85rem; margin: 0.2rem 0 0.5rem; }
 .slot-cap { font-size: 0.82rem; color: var(--muted); }
+.slot-field { width: 100%; max-width: 100%; padding: 0.5rem 0.65rem; font-family: inherit;
+              border: 1px solid #cfc8b8; border-radius: var(--radius-sm); background: #fff; }
 .slot-full-note { color: var(--accent-dark); font-weight: 600; }
 
 /* ---- Workout plans ---- */
-.wp-search-wrap { margin-bottom: 1.25rem; }
-.wp-search { max-width: 320px; }
-.wp-summary { display: flex; gap: 1.5rem; margin: 1rem 0 1.5rem; flex-wrap: wrap; }
+.wp-summary { display: flex; gap: 1rem; margin: 1rem 0 1.5rem; flex-wrap: wrap; }
 .wp-summary-item { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-md);
-                    padding: 0.9rem 1.25rem; text-align: center; }
+                    padding: 0.9rem 1.25rem; text-align: center; min-width: 135px; }
 .wp-sum-num { display: block; font-family: var(--font-head); font-size: 1.4rem; font-weight: 700; color: var(--primary); }
 .wp-sum-txt { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: .03em; }
-.wp-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.1rem; }
-.wp-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 1.25rem; }
-.wp-card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+.wp-list { display: grid; gap: 1.1rem; }
+.wp-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 1.5rem; }
+.wp-card-head { display: grid; grid-template-columns: auto 1fr; gap: 1rem;
+                align-items: start; margin-bottom: 1rem; }
+.wp-card-title-wrap { display: grid; gap: 0.25rem; }
 .wp-title { margin: 0; font-size: 1.05rem; color: var(--ink); }
-.wp-meta { color: var(--muted); font-size: 0.82rem; margin-bottom: 0.5rem; }
-.wp-num { color: var(--primary); font-weight: 700; }
+.wp-meta { color: var(--muted); font-size: 0.82rem; display: flex; align-items: center;
+           gap: 0.45rem; flex-wrap: wrap; }
+.wp-num { color: var(--primary); font-weight: 700; min-width: 2rem; }
 .wp-details { color: var(--ink); font-size: 0.9rem; line-height: 1.6; }
 
 /* ---- Plan (membership) rows ---- */

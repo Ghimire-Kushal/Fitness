@@ -181,7 +181,7 @@ require_once __DIR__ . '/../includes/header.php';
                 <input type="hidden" name="time_slot_id" value="<?= (int) $s['id'] ?>">
 
                 <label class="mini-label">Booking type</label>
-                <select name="booking_type" class="slot-select" required>
+                <select name="booking_type" class="slot-field" required>
                     <option value="gym_session">Gym Session</option>
                     <?php if (!empty($myTrainers)): ?>
                         <option value="trainer_appointment">Trainer Appointment</option>
@@ -190,7 +190,7 @@ require_once __DIR__ . '/../includes/header.php';
 
                 <?php if (!empty($myTrainers)): ?>
                     <label class="mini-label">Trainer (only for appointments)</label>
-                    <select name="trainer_id" class="slot-select">
+                    <select name="trainer_id" class="slot-field">
                         <option value="0">— Select trainer —</option>
                         <?php foreach ($myTrainers as $t): ?>
                             <option value="<?= (int) $t['id'] ?>">

@@ -62,10 +62,6 @@ require_once __DIR__ . '/../includes/header.php';
             <span class="wp-sum-num"><?= e(date('M j', strtotime($latest))) ?></span>
             <span class="wp-sum-txt">Latest Update</span>
         </div>
-        <div class="wp-search-wrap">
-            <input type="text" id="wpSearch" class="wp-search"
->
-        </div>
     </div>
 
     <!-- ================= PLAN CARDS ================= -->
@@ -77,14 +73,14 @@ require_once __DIR__ . '/../includes/header.php';
         <div class="wp-card" data-search="<?= e($searchKey) ?>">
             <div class="wp-card-head">
                 <div class="wp-num">#<?= $total - $i ?></div>
-                <div>
+                <div class="wp-card-title-wrap">
                     <div class="wp-title"><?= e($p['title']) ?></div>
                     <div class="wp-meta">
-                        by <strong><?= e($p['assigned_by_name'] ?: 'Staff') ?></strong>
+                        <span>by <strong><?= e($p['assigned_by_name'] ?: 'Staff') ?></strong></span>
                         <?php if ($p['assigned_by_role']): ?>
                             <span class="role-badge"><?= e($p['assigned_by_role']) ?></span>
                         <?php endif; ?>
-                        · <?= e(date('M j, Y', strtotime($p['created_at']))) ?>
+                        <span><?= e(date('M j, Y', strtotime($p['created_at']))) ?></span>
                     </div>
                 </div>
             </div>
@@ -94,31 +90,6 @@ require_once __DIR__ . '/../includes/header.php';
         </div>
     <?php endforeach; ?>
     </div>
-
-    <!-- shown when the search finds no matches -->
-    <div id="wpNoResult" class="muted" style="display:none; padding:1rem;">
-        No plans match your search.
-    </div>
-
-    <script>
-    // Live search filter — filters instantly without hitting the server
-    (function () {
-        const input = document.getElementById('wpSearch');
-        const cards = document.querySelectorAll('#wpList .wp-card');
-        const noRes = document.getElementById('wpNoResult');
-
-        input.addEventListener('input', function () {
-            const q = this.value.trim().toLowerCase();
-            let visible = 0;
-            cards.forEach(function (card) {
-                const match = card.dataset.search.includes(q);
-                card.style.display = match ? '' : 'none';
-                if (match) visible++;
-            });
-            noRes.style.display = visible === 0 ? 'block' : 'none';
-        });
-    })();
-    </script>
 
 <?php endif; ?>
 
