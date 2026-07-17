@@ -71,7 +71,7 @@ $stmt = $pdo->prepare(
              JOIN membership_plans mp ON mp.id = m.plan_id
              WHERE m.user_id = u.id AND m.status = 'active' AND m.end_date >= CURDATE()
              ORDER BY m.end_date DESC
-             LIMIT 1) AS active_plan
+             LIMIT 1) AS act    ive_plan
      FROM users u
      $where
      ORDER BY u.created_at DESC"
