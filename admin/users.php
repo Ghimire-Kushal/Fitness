@@ -62,6 +62,8 @@ if (in_array($role, [1, 2, 3], true)) {
     $params[] = $role;
 }
 
+//user all table query with booking count and active membership status
+
 $stmt = $pdo->prepare(
     "SELECT u.id, u.name, u.email, u.phone, u.role_id, u.created_at,
             (SELECT COUNT(*) FROM bookings b WHERE b.user_id = u.id) AS booking_count,
@@ -71,7 +73,7 @@ $stmt = $pdo->prepare(
              JOIN membership_plans mp ON mp.id = m.plan_id
              WHERE m.user_id = u.id AND m.status = 'active' AND m.end_date >= CURDATE()
              ORDER BY m.end_date DESC
-             LIMIT 1) AS act    ive_plan
+             LIMIT 1) AS active_plan
      FROM users u
      $where
      ORDER BY u.created_at DESC"
